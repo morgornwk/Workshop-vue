@@ -1,0 +1,39 @@
+.grade-wrap {
+  min-height: calc(100vh - 72px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: #f9fafb;
+}
+
+.grade-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 24px;
+  border-radius: 16px !important;
+}
+
+.grade-head {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.grade-result {
+  margin-top: 20px;
+  padding: 14px;
+  text-align: center;
+  font-size: 1.25rem;
+  border-radius: 8px;
+}
+
+.grade-result strong {
+  font-size: 1.5rem;
+}
+
+.grade--a { background: #ecfdf5; color: #047857; }
+.grade--b { background: #eff6ff; color: #1d4ed8; }
+.grade--c { background: #f0fdf4; color: #15803d; }
+.grade--d { background: #fff7ed; color: #c2410c; }
+.grade--f { background: #fef2f2; color: #b91c1c; }

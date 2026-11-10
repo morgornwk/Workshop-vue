@@ -1,7 +1,7 @@
 <template>
     <header class="navbar">
         <div class="navbar__inner">
-        <a href="#about" class="navbar__logo">
+        <a href="#" class="navbar__logo">
             Mor<span>gorn</span>
         </a>
 
