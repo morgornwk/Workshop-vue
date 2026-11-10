@@ -60,7 +60,6 @@
           </div>
           <ul class="strength-list">
             <li v-for="(s, i) in profile.strengths" :key="'str-' + i" class="strength-item">
-              <v-icon size="16" color="#f97316" class="mr-2">mdi-check-circle-outline</v-icon>
               <span>{{ s }}</span>
             </li>
           </ul>
