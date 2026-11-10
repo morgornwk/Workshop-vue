@@ -1,0 +1,91 @@
+.footer {
+  background: #0f172a;
+  color: #f8fafc;
+  padding: 48px 0 24px;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.footer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 24px;
+  padding-bottom: 28px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.footer-logo {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #fff;
+  margin: 0 0 6px;
+}
+
+.footer-logo span {
+  color: #f97316;
+}
+
+.footer-motto {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #94a3b8;
+  font-style: italic;
+}
+
+.footer-socials {
+  display: flex;
+  gap: 12px;
+}
+
+.footer-social-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff !important;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.footer-social-btn .v-icon {
+  color: #ffffff !important;
+}
+
+.footer-social-btn:hover {
+  background: #f97316;
+  border-color: #f97316;
+  transform: translateY(-2px);
+}
+
+.footer-social-btn:hover .v-icon {
+  color: #ffffff !important;
+}
+
+.footer-bottom {
+  padding-top: 20px;
+  text-align: center;
+}
+
+.footer-copy {
+  margin: 0;
+  font-size: 0.82rem;
+  color: #94a3b8;
+}
+
+@media (max-width: 600px) {
+  .footer-top {
+    flex-direction: column;
+    text-align: center;
+  }
+}
