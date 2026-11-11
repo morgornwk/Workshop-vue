@@ -14,10 +14,14 @@ export function useAuthSubmit(actionFn, { successPrefix, onComplete }) {
 
     try {
       const res = await actionFn(payload)
-      successMsg.value = `${successPrefix} ${res.user.name}`
+      const displayName = (res.user && (res.user.username || res.user.name)) || ''
+      const approveNote = res.user && res.user.approve === false
+        ? ' (บัญชีรออนุมัติจากผู้ดูแลระบบก่อนเข้าดูรายละเอียด/สั่งซื้อ)'
+        : ''
+      successMsg.value = `${successPrefix} ${displayName}${approveNote}`
       redirectTimer = setTimeout(() => {
         if (onComplete) onComplete()
-      }, 700)
+      }, 900)
     } catch (err) {
       error.value = err.message || 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง'
     } finally {

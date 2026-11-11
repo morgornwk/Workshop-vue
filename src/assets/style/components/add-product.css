@@ -1,0 +1,317 @@
+.add-prod__placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: rgba(255, 255, 255, 0.85);
+  text-align: center;
+  padding: 24px;
+  font: 600 0.95rem var(--kv-font-display);
+}
+
+.add-prod__placeholder .v-icon {
+  color: inherit;
+}
+
+.cropper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.shop-page .cropper__stage {
+  height: auto;
+  width: 100%;
+  max-width: 340px;
+  aspect-ratio: 3 / 5;
+  margin: 0 auto;
+  border: 1px solid #e5e7eb;
+  touch-action: none;
+  user-select: none;
+}
+
+.shop-page .cropper__stage--active {
+  cursor: grab;
+}
+
+.shop-page .cropper__stage--dragging {
+  cursor: grabbing;
+}
+
+.cropper__img {
+  display: block;
+  flex-shrink: 0;
+  max-width: none !important;
+  max-height: none !important;
+  pointer-events: none;
+  user-select: none;
+}
+
+.cropper__stage .detail__badge,
+.cropper__stage .detail__pop {
+  z-index: 2;
+  pointer-events: none;
+}
+
+.cropper__guide {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: rgba(17, 24, 39, 0.72);
+  color: #ffffff;
+  font: 500 0.76rem var(--kv-font-body, 'Noto Sans Thai', sans-serif);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.cropper__toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+}
+
+.cropper__zoom-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cropper__slider {
+  flex: 1;
+  min-width: 0;
+  accent-color: #f97316;
+  cursor: pointer;
+}
+
+.cropper__presets {
+  display: flex;
+  gap: 8px;
+}
+
+.cropper__preset-btn {
+  flex: 1;
+  min-height: 34px;
+  padding: 0 10px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  color: #111827;
+  font: 600 0.8rem var(--kv-font-display);
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.cropper__preset-btn:hover {
+  border-color: #f97316;
+  color: #ea580c;
+}
+
+.add-prod__upload {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #f9fafb;
+  border: 1.5px dashed #d1d5db;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.add-prod__upload-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.add-prod__upload-title {
+  font: 600 0.86rem var(--kv-font-display);
+  color: #111827;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.add-prod__upload-hint {
+  font-size: 0.76rem;
+  color: #6b7280;
+}
+
+.add-prod__upload-btns {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.add-prod__file-label {
+  min-height: 36px;
+  padding: 0 14px;
+  border-radius: 9px;
+  background: #111827;
+  color: #ffffff;
+  font: 600 0.82rem var(--kv-font-display);
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.add-prod__file-label:hover {
+  background: #ea580c;
+}
+
+.add-prod__file-native {
+  display: none;
+}
+
+.add-prod__file-clear {
+  min-height: 36px;
+  padding: 0 12px;
+  border: 1px solid #fecaca;
+  border-radius: 9px;
+  background: #fef2f2;
+  color: #dc2626;
+  font: 600 0.82rem var(--kv-font-display);
+  cursor: pointer;
+}
+
+.add-prod__file-clear:hover {
+  background: #fee2e2;
+}
+
+.add-prod__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.add-prod__field--tile {
+  background: #f4f5f7;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  cursor: text;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.add-prod__field--tile:focus-within {
+  border-color: #f97316;
+  background: #ffffff;
+}
+
+.add-prod__req {
+  color: #ea580c;
+}
+
+.add-prod__input,
+.add-prod__textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #111827;
+  font: 600 0.95rem / 1.4 var(--kv-font-body, 'Inter', sans-serif);
+  transition: border-color 0.15s ease;
+}
+
+.add-prod__input {
+  height: 48px;
+  padding: 0 12px;
+}
+
+.add-prod__field--tile .add-prod__input {
+  height: auto;
+  padding: 2px 0 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  font: 700 1rem / 1.4 'Space Grotesk', sans-serif;
+}
+
+.add-prod__input::placeholder,
+.add-prod__textarea::placeholder {
+  color: #9ca3af;
+  font: 400 0.88rem / 1.4 var(--kv-font-body, 'Noto Sans Thai', 'Inter', sans-serif);
+}
+
+.shop-page .add-prod__input:focus,
+.shop-page .add-prod__input:focus-visible,
+.shop-page .add-prod__textarea:focus,
+.shop-page .add-prod__textarea:focus-visible {
+  outline: none;
+  border-color: #f97316;
+  box-shadow: none;
+}
+
+.shop-page .add-prod__field--tile .add-prod__input:focus,
+.shop-page .add-prod__field--tile .add-prod__input:focus-visible {
+  border-color: transparent;
+}
+
+.add-prod__textarea {
+  min-height: 88px;
+  padding: 10px 12px;
+  font-weight: 400;
+  line-height: 1.55;
+  resize: vertical;
+}
+
+.shop-page .add-prod__price-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: start;
+  gap: 12px;
+}
+
+.add-prod__price-col,
+.add-prod__stock-col {
+  min-width: 0;
+}
+
+.add-prod__error {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+.shop-page .add-prod__cancel {
+  min-height: 52px;
+  padding: 0 22px;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #111827;
+  border: 1.5px solid #e5e7eb;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.shop-page .add-prod__cancel:hover {
+  border-color: #f97316;
+  color: #ea580c;
+}
+
+@media (max-width: 600px) {
+  .shop-page .add-prod__price-row {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,278 @@
+.shop-page {
+  --kv-red: #dc0a2d;
+  --kv-blue: #3b4cca;
+  --kv-yellow: #ffcb05;
+  --kv-paper: #ffe14d;
+  --kv-ink: #212121;
+  --kv-muted: #5b5f6b;
+  --kv-font-display: 'Kanit', 'Space Grotesk', 'Prompt', sans-serif;
+  --kv-font-body: 'Noto Sans Thai', 'Inter', 'Prompt', sans-serif;
+  font-family: var(--kv-font-body);
+  color: var(--kv-ink);
+  background: var(--kv-paper);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.shop-page .kv-label {
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--kv-muted);
+}
+
+.shop-page .kv-slab {
+  border-radius: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.45);
+  background: linear-gradient(160deg, #f472b6, #7c3aed);
+}
+
+/* buttons */
+.shop-page .kv-btn {
+  min-height: 46px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 10px;
+  font: 600 0.9rem var(--kv-font-display);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.shop-page .detail__back {
+  margin-bottom: 20px;
+  background: #ffffff;
+  color: #111827;
+  border: 1.5px solid #e5e7eb;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+.shop-page .detail__back:hover {
+  border-color: #f97316;
+  color: #ea580c;
+}
+.shop-page .detail__back .v-icon {
+  color: inherit;
+}
+
+.shop-page .kv-chip {
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 10px;
+  border: 1px solid #d5d8de;
+  background: #fff;
+  color: var(--kv-ink);
+  font: 600 0.82rem var(--kv-font-display);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.shop-page .kv-chip--on { background: var(--kv-red); border-color: var(--kv-red); color: #fff; }
+
+.shop-page button:focus-visible,
+.shop-page a:focus-visible,
+.shop-page input:focus-visible { outline: 3px solid var(--kv-blue); outline-offset: 2px; }
+
+/* vault section (กระดาษเหลือง) */
+.shop-vault {
+  flex: 1;
+  background-color: var(--kv-paper);
+  background-image: radial-gradient(rgba(33, 33, 33, 0.07) 1.2px, transparent 1.2px);
+  background-size: 16px 16px;
+  padding: 56px 64px 100px;
+}
+.shop-vault__inner {
+  max-width: 1360px;
+  margin: 0 auto;
+}
+.shop-vault__head {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  margin-bottom: 28px;
+}
+.shop-vault__title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.shop-vault__tools {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: nowrap;
+  flex: 0 1 auto;
+}
+.shop-page .shop-vault__admin-add {
+  height: 44px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 10px;
+  color: #ffffff;
+  background: #111827;
+  box-shadow: 0 4px 12px rgba(17, 24, 39, 0.18);
+  font: 600 0.88rem var(--kv-font-display);
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+.shop-page .shop-vault__admin-add:hover {
+  background: linear-gradient(to right, #f97316, #ea580c);
+  color: #ffffff;
+  box-shadow: 0 6px 16px rgba(249, 115, 22, 0.32);
+}
+.shop-page .shop-vault__admin-add .v-icon {
+  color: inherit;
+}
+.shop-vault__title {
+  font: 700 clamp(1.75rem, 3.2vw, 2.4rem) / 1.3 var(--kv-font-display);
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+.shop-vault__sub { margin: 0; max-width: 600px; font-size: 0.98rem; line-height: 1.75; color: #3d4150; }
+.shop-vault__controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px 16px;
+}
+.shop-vault__filters { display: flex; gap: 8px; flex-wrap: wrap; }
+.shop-vault__search {
+  width: 260px;
+  flex: 1 1 220px;
+  min-width: 180px;
+  height: 44px;
+  box-sizing: border-box;
+  padding: 0 10px 0 14px;
+  border-radius: 10px;
+  background: #ffffff;
+  border: 1px solid #d5d8de;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.shop-vault__search:focus-within {
+  border-color: var(--kv-red);
+  box-shadow: 0 0 0 3px rgba(220, 10, 45, 0.14);
+}
+.shop-vault__search input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font: 500 0.9rem var(--kv-font-body);
+  color: var(--kv-ink);
+  caret-color: var(--kv-red);
+}
+.shop-vault__search input::placeholder { color: #6b7280; }
+.shop-vault__search input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+.shop-page .shop-vault__search input:focus,
+.shop-page .shop-vault__search input:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+.shop-vault__clear {
+  width: 26px;
+  height: 26px;
+  border: 0;
+  border-radius: 50%;
+  background: #f3f4f6;
+  color: var(--kv-muted);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.shop-vault__clear:hover { background: #e5e7eb; color: var(--kv-ink); }
+.shop-vault__msg { font-weight: 600; margin: 0 0 20px; }
+.shop-vault__msg--error {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #b91c1c;
+}
+.shop-vault__retry {
+  padding: 6px 14px;
+  border: 0;
+  border-radius: 8px;
+  background: #111827;
+  color: #ffffff;
+  font: 600 0.85rem var(--kv-font-display);
+  cursor: pointer;
+}
+.shop-vault__retry:hover { background: #1f2937; }
+.shop-vault__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 28px;
+}
+
+/* footer */
+.shop-foot {
+  background: var(--kv-ink);
+  color: #c9cbd6;
+  padding: 36px 64px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 0.82rem;
+}
+.shop-foot__logo { font: 700 1rem 'Space Grotesk', sans-serif; letter-spacing: 0.06em; color: #fff; }
+.shop-foot__logo span { color: var(--kv-yellow); }
+.shop-foot__sprites {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.shop-foot__sprite {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  transition: transform 0.2s ease;
+}
+.shop-foot__sprite:hover { transform: translateY(-4px) scale(1.1); }
+
+@media (max-width: 1180px) {
+  .shop-vault__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+}
+
+@media (max-width: 900px) {
+  .shop-vault { padding: 48px 24px 88px; }
+}
+
+@media (max-width: 700px) {
+  .shop-vault { padding: 40px 20px 80px; }
+  .shop-vault__controls { flex-direction: column; align-items: stretch; }
+  .shop-vault__tools { width: 100%; }
+  .shop-vault__search { flex: 1 1 0; width: auto; min-width: 0; }
+  .shop-foot { padding: 32px 20px; justify-content: center; text-align: center; gap: 16px; }
+}
+
+@media (max-width: 620px) {
+  .shop-vault__grid { grid-template-columns: 1fr; }
+}

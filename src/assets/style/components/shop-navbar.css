@@ -1,0 +1,186 @@
+.shop-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: 72px;
+  box-sizing: border-box;
+  padding: 0 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+.shop-nav__brand { display: flex; align-items: center; gap: 12px; text-decoration: none; min-height: 44px; border-radius: 10px; }
+
+.shop-nav__logo {
+  display: block;
+  height: 44px;
+  width: auto;
+  max-width: 120px;
+  object-fit: contain;
+}
+
+.shop-nav__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.shop-nav .shop-nav__actions .shop-nav__btn {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  color: #111827;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+}
+.shop-nav .shop-nav__actions .shop-nav__btn:hover {
+  background: #fff7ed;
+  border-color: #fed7aa;
+  color: #ea580c;
+  box-shadow: 0 4px 10px rgba(249, 115, 22, 0.12);
+  transform: translateY(-1px);
+}
+.shop-nav .shop-nav__actions .shop-nav__btn--account {
+  background: linear-gradient(135deg, #f97316, #ea580c);
+  border-color: transparent;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.24);
+}
+.shop-nav .shop-nav__actions .shop-nav__btn--account:hover {
+  background: linear-gradient(135deg, #ea580c, #c2410c);
+  border-color: transparent;
+  color: #ffffff;
+  box-shadow: 0 6px 16px rgba(249, 115, 22, 0.32);
+}
+.shop-nav .shop-nav__actions .shop-nav__btn .v-icon,
+.shop-nav .shop-nav__user .shop-nav__logout .v-icon {
+  color: inherit;
+}
+.shop-page .shop-nav__btn:focus-visible,
+.shop-page .shop-nav__brand:focus-visible,
+.shop-page .shop-nav__logout:focus-visible {
+  outline: 2px solid #f97316;
+  outline-offset: 2px;
+}
+.shop-nav__badge {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  min-width: 19px;
+  height: 19px;
+  padding: 0 5px;
+  box-sizing: border-box;
+  border-radius: 999px;
+  border: 2px solid #ffffff;
+  background: linear-gradient(135deg, #f97316, #ea580c);
+  color: #ffffff;
+  font: 700 0.68rem / 1 'Space Grotesk', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.shop-nav__user {
+  height: 44px;
+  min-width: 0;
+  padding: 4px;
+  box-sizing: border-box;
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.shop-nav__identity {
+  min-width: 0;
+  padding-right: 2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.shop-nav__avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: #e5e7eb;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.1);
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.shop-nav__avatar-img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+}
+
+.shop-nav__username {
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font: 600 0.88rem / 1.2 var(--kv-font-display, 'Space Grotesk', sans-serif);
+  letter-spacing: -0.01em;
+  color: #111827;
+}
+
+.shop-nav__divider {
+  width: 1px;
+  height: 18px;
+  background: #e5e7eb;
+  flex-shrink: 0;
+}
+
+.shop-nav__logout {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 0;
+  background: transparent;
+  color: #6b7280;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+
+.shop-nav__logout:hover {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+@media (max-width: 900px) {
+  .shop-nav { padding: 0 24px; }
+}
+
+@media (max-width: 700px) {
+  .shop-nav { padding: 0 16px; gap: 10px; }
+  .shop-nav__username { max-width: 76px; }
+}

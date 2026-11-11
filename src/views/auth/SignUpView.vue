@@ -15,16 +15,20 @@
 <script>
 import AuthLayout from '@/components/auth/AuthLayout.vue'
 import SignUpForm from '@/components/auth/SignUpForm.vue'
+import router from '@/router'
 import { signUp } from '@/services/authService'
 import { useAuthSubmit } from '@/hook/useAuthSubmit'
 
 export default {
   name: 'SignUpView',
   components: { AuthLayout, SignUpForm },
-  setup(_, { root }) {
+  setup() {
     return useAuthSubmit(signUp, {
       successPrefix: 'สมัครสมาชิกสำเร็จ ยินดีต้อนรับ',
-      onComplete: () => root.$router.push('/'),
+      onComplete: () => {
+        const redirect = router.currentRoute.query.redirect || '/shop'
+        router.push(redirect).catch(() => {})
+      },
     })
   },
 }

@@ -74,6 +74,10 @@
   color: #4b5563;
 }
 
+.auth-field__icon-btn .v-icon {
+  color: inherit;
+}
+
 .auth-field__error {
   display: inline-flex;
   align-items: center;
@@ -82,42 +86,6 @@
   font-weight: 500;
   color: #dc2626;
 }
-
-/* Password Strength Meter */
-.pw-strength {
-  margin-top: 6px;
-}
-
-.pw-strength__bars {
-  display: flex;
-  gap: 4px;
-}
-
-.pw-strength__bar {
-  flex: 1;
-  height: 4px;
-  border-radius: 999px;
-  background: #e5e7eb;
-  transition: background 0.25s ease;
-}
-
-.pw-strength__bar--1 { background: #ef4444; }
-.pw-strength__bar--2 { background: #f97316; }
-.pw-strength__bar--3 { background: #eab308; }
-.pw-strength__bar--4 { background: #22c55e; }
-.pw-strength__bar--5 { background: #10b981; }
-
-.pw-strength__label {
-  margin: 4px 0 0;
-  font-size: 0.75rem;
-  font-weight: 600;
-}
-
-.pw-strength__label--1 { color: #ef4444; }
-.pw-strength__label--2 { color: #f97316; }
-.pw-strength__label--3 { color: #ca8a04; }
-.pw-strength__label--4,
-.pw-strength__label--5 { color: #16a34a; }
 
 /* Primary Orange Gradient Submit Button */
 .auth-submit-btn {

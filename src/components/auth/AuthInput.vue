@@ -23,7 +23,7 @@
         :aria-label="show ? 'Hide password' : 'Show password'"
         @click="show = !show"
       >
-        <v-icon size="20" color="currentColor">
+        <v-icon size="20">
           {{ show ? 'mdi-eye-outline' : 'mdi-eye-off-outline' }}
         </v-icon>
       </button>
