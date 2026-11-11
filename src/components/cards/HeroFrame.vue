@@ -3,16 +3,12 @@
     <div class="hero-container">
       <div class="hero-content">
         <div class="hero-tag">
-          <span class="hero-tag__text">Hi I'm Morgorn</span>
+          <span class="hero-tag__text">Hi I'm {{ profile.nickname }}</span>
         </div>
 
         <h1 class="hero-name">{{ profile.fullName }}</h1>
         <h2 class="hero-role">{{ profile.role }}</h2>
-        <p class="hero-intro">{{ profile.intro }}</p>
-
-        <div class="hero-connect">
-        
-        </div>
+        <p v-if="profile.intro" class="hero-intro">{{ profile.intro }}</p>
       </div>
 
       <div class="hero-visual">
@@ -37,4 +33,4 @@ export default {
 }
 </script>
 
-<style scoped src="../../assets/style/components/HeroFrame.css">
+<style scoped src="../../assets/style/components/hero-frame.css"></style>

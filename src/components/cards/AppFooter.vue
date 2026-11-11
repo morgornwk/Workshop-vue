@@ -60,4 +60,4 @@ export default {
 }
 </script>
 
-<style scoped src="../../assets/style/components/AppFooter.css">
+<style scoped src="../../assets/style/components/app-footer.css">

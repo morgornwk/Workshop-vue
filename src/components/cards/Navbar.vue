@@ -1,43 +1,26 @@
 <template>
-    <header class="navbar">
-        <div class="navbar__inner">
-        <a href="#" class="navbar__logo">
-            Mor<span>gorn</span>
-        </a>
+  <header class="navbar">
+    <div class="navbar__inner">
+      <router-link to="/" class="navbar__logo">
+        Mor<span>gorn</span>
+      </router-link>
 
-        <button class="navbar__login-btn" @click="toggle">
-            <v-icon small class="mr-1">mdi-account-circle-outline</v-icon>
-            {{ user ? user : 'Login' }}
-        </button>
-        </div>
-
-    </header>
+      <div class="navbar__actions">
+        <router-link to="/signin" class="navbar__btn navbar__btn--signin">
+          Sign In
+        </router-link>
+        <router-link to="/signup" class="navbar__btn navbar__btn--signup">
+          Sign Up
+        </router-link>
+      </div>
+    </div>
+  </header>
 </template>
 
 <script>
 export default {
-    name: 'AppNavbar',
-    data: () => ({
-        email: '',
-        password: '',
-        user: '',
-    }),
-    methods: {
-        toggle() {
-            if (this.user) {
-                this.user = ''
-            } else {
-                this.$refs.dlg.showModal()
-            }
-        },
-        submit() {
-            this.user = this.email.split('@')[0]
-            this.email = ''
-            this.password = ''
-            this.$refs.dlg.close()
-        },
-    },
+  name: 'AppNavbar',
 }
 </script>
 
-<style scoped src="../../assets/style/components/Navbar.css"></style>
+<style scoped src="../../assets/style/components/navbar.css"></style>

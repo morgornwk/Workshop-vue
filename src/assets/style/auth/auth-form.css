@@ -1,0 +1,154 @@
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.auth-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.auth-field__label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.auth-field__control {
+  position: relative;
+}
+
+.auth-field__input {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 0.95rem;
+  color: #111827;
+  background: #f9fafb;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.auth-field__input::placeholder {
+  color: #9ca3af;
+}
+
+.auth-field__input:focus {
+  background: #ffffff;
+  border-color: #f97316;
+}
+
+.auth-field__input--icon {
+  padding-right: 46px;
+}
+
+.auth-field__input--error {
+  border-color: #fca5a5;
+}
+
+.auth-field__input--error:focus {
+  border-color: #ef4444;
+}
+
+.auth-field__icon-btn {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  padding: 4px;
+  color: #9ca3af;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.auth-field__icon-btn:hover {
+  color: #4b5563;
+}
+
+.auth-field__error {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.76rem;
+  font-weight: 500;
+  color: #dc2626;
+}
+
+/* Password Strength Meter */
+.pw-strength {
+  margin-top: 6px;
+}
+
+.pw-strength__bars {
+  display: flex;
+  gap: 4px;
+}
+
+.pw-strength__bar {
+  flex: 1;
+  height: 4px;
+  border-radius: 999px;
+  background: #e5e7eb;
+  transition: background 0.25s ease;
+}
+
+.pw-strength__bar--1 { background: #ef4444; }
+.pw-strength__bar--2 { background: #f97316; }
+.pw-strength__bar--3 { background: #eab308; }
+.pw-strength__bar--4 { background: #22c55e; }
+.pw-strength__bar--5 { background: #10b981; }
+
+.pw-strength__label {
+  margin: 4px 0 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.pw-strength__label--1 { color: #ef4444; }
+.pw-strength__label--2 { color: #f97316; }
+.pw-strength__label--3 { color: #ca8a04; }
+.pw-strength__label--4,
+.pw-strength__label--5 { color: #16a34a; }
+
+/* Primary Orange Gradient Submit Button */
+.auth-submit-btn {
+  width: 100%;
+  margin-top: 6px;
+  padding: 13px 18px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(to right, #f97316, #ea580c);
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 10px 22px -6px rgba(249, 115, 22, 0.4);
+  transition: transform 0.15s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+.auth-submit-btn:hover:not(:disabled) {
+  background: linear-gradient(to right, #ea580c, #c2410c);
+  box-shadow: 0 12px 26px -4px rgba(249, 115, 22, 0.5);
+}
+
+.auth-submit-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.auth-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

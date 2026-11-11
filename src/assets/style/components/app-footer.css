@@ -32,13 +32,6 @@
   color: #f97316;
 }
 
-.footer-motto {
-  margin: 0;
-  font-size: 0.95rem;
-  color: #94a3b8;
-  font-style: italic;
-}
-
 .footer-socials {
   display: flex;
   gap: 12px;

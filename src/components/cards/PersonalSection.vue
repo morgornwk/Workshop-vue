@@ -1,100 +1,93 @@
 <template>
   <section id="personal" class="personal-section">
     <div class="personal-container">
-      <!-- Section Header -->
       <div class="personal-header">
-        <h2 class="personal-title">Personal and Interests</h2>
+        <h2 class="personal-title">Personal &amp; Interests</h2>
         <p class="personal-sub">ไลฟ์สไตล์ สิ่งที่ชอบ จุดแข็ง และแรงบันดาลใจ</p>
       </div>
 
-      <div class="personal-grid">
-        <!-- Hobbies & Likes & Dislikes -->
-        <div class="card card--full">
-          <div class="card-columns">
-            <!-- Hobbies -->
-            <div class="col-group">
-              <div class="col-title">
-                <v-icon size="20" color="#f97316" class="mr-1">mdi-gamepad-variant-outline</v-icon>
-                <span>งานอดิเรก</span>
-              </div>
-              <ul class="item-list">
-                <li v-for="(item, i) in profile.hobbies" :key="'hobby-' + i" class="item-tag item-tag--orange">
-                  {{ item }}
-                </li>
-              </ul>
-            </div>
-
-            <!-- Likes -->
-            <div class="col-group">
-              <div class="col-title">
-                <v-icon size="20" color="#10b981" class="mr-1">mdi-thumb-up-outline</v-icon>
-                <span>สิ่งที่ชอบ</span>
-              </div>
-              <ul class="item-list">
-                <li v-for="(item, i) in profile.likes" :key="'like-' + i" class="item-tag item-tag--green">
-                  {{ item }}
-                </li>
-              </ul>
-            </div>
-
-            <!-- Dislikes -->
-            <div class="col-group">
-              <div class="col-title">
-                <v-icon size="20" color="#ef4444" class="mr-1">mdi-thumb-down-outline</v-icon>
-                <span>สิ่งที่ไม่ชอบ</span>
-              </div>
-              <ul class="item-list">
-                <li v-for="(item, i) in profile.dislikes" :key="'dislike-' + i" class="item-tag item-tag--gray">
-                  {{ item }}
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <!-- Strengths Card -->
-        <div class="card">
+      <div class="bento-grid">
+        <article class="bento-card">
           <div class="card-head">
-            <v-icon size="22" color="#f97316" class="mr-2">mdi-lightning-bolt-outline</v-icon>
+            <span class="card-icon card-icon--orange">
+              <v-icon size="18" color="#f97316">mdi-lightning-bolt-outline</v-icon>
+            </span>
             <h3 class="card-title">จุดแข็ง (Key Strengths)</h3>
           </div>
-          <ul class="strength-list">
-            <li v-for="(s, i) in profile.strengths" :key="'str-' + i" class="strength-item">
-              <span>{{ s }}</span>
+
+          <ol class="strength-list">
+            <li v-for="(item, i) in parsedStrengths" :key="'str-' + i" class="strength-row">
+              <span class="strength-num">0{{ i + 1 }}</span>
+              <div class="strength-copy">
+                <div class="strength-heading">{{ item.title }}</div>
+                <div v-if="item.desc" class="strength-desc">{{ item.desc }}</div>
+              </div>
             </li>
-          </ul>
-        </div>
+          </ol>
+        </article>
 
-        <!-- Favorite Sports Team -->
-        <div class="card" v-if="profile.favoriteTeam">
+        <article class="bento-card bento-card--tinted">
           <div class="card-head">
-            <v-icon size="22" color="#f97316" class="mr-2">mdi-trophy-outline</v-icon>
-            <h3 class="card-title">ทีมกีฬาที่ชอบ</h3>
+            <span class="card-icon card-icon--slate">
+              <v-icon size="18" color="#111827">mdi-palette-outline</v-icon>
+            </span>
+            <h3 class="card-title">ไลฟ์สไตล์และความชอบ</h3>
           </div>
-          <div class="team-body">
-            <div class="team-badge">
-              <v-icon size="36" color="#f97316">{{ profile.favoriteTeam.icon || 'mdi-soccer' }}</v-icon>
-            </div>
-            <div>
-              <h4 class="team-name">{{ profile.favoriteTeam.name }}</h4>
-              <p class="team-meta">{{ profile.favoriteTeam.sport }}</p>
-              <p class="team-reason">{{ profile.favoriteTeam.reason }}</p>
-            </div>
-          </div>
-        </div>
 
-        <!-- Free Design / Motto Space -->
-        <div class="card card--accent card--full">
-          <div class="free-space-inner">
-            <div class="free-space-icon">
-              <v-icon size="32" color="#ffffff">mdi-format-quote-open</v-icon>
+          <div class="pref-groups">
+            <div class="pref-block">
+              <div class="pref-label">
+                <span class="dot dot--orange"></span>
+                งานอดิเรก
+              </div>
+              <div class="pill-row">
+                <span v-for="(item, i) in profile.hobbies" :key="'h-' + i" class="pill pill--warm">
+                  {{ item }}
+                </span>
+              </div>
             </div>
-            <div class="free-space-content">
-              <span class="free-space-tag">คติประจำใจ</span>
-              <p class="free-space-text">“{{ profile.freeSpace }}”</p>
+
+            <div class="pref-block">
+              <div class="pref-label">
+                <span class="dot dot--green"></span>
+                สิ่งที่ชอบ
+              </div>
+              <div class="pill-row">
+                <span v-for="(item, i) in profile.likes" :key="'l-' + i" class="pill pill--mint">
+                  {{ item }}
+                </span>
+              </div>
+            </div>
+
+            <div class="pref-block">
+              <div class="pref-label">
+                <span class="dot dot--muted"></span>
+                สิ่งที่ไม่ชอบ
+              </div>
+              <div class="pill-row">
+                <span v-for="(item, i) in profile.dislikes" :key="'d-' + i" class="pill pill--neutral">
+                  {{ item }}
+                </span>
+              </div>
             </div>
           </div>
-        </div>
+        </article>
+
+        <article v-if="profile.favoriteTeam" class="bento-card team-card">
+          <div class="team-badge">
+            <v-icon size="28" color="#f97316">{{ profile.favoriteTeam.icon || 'mdi-basketball' }}</v-icon>
+          </div>
+          <div class="team-copy">
+            <span class="team-eyebrow">ทีมกีฬาที่ชอบ · {{ profile.favoriteTeam.sport }}</span>
+            <h3 class="team-name">{{ profile.favoriteTeam.name }}</h3>
+            <p class="team-reason">{{ profile.favoriteTeam.reason }}</p>
+          </div>
+        </article>
+
+        <article v-if="profile.freeSpace" class="bento-card motto-card">
+          <span class="motto-eyebrow">Personal Motto · คติประจำใจ</span>
+          <p class="motto-text">“{{ profile.freeSpace }}”</p>
+        </article>
       </div>
     </div>
   </section>
@@ -109,7 +102,20 @@ export default {
       required: true,
     },
   },
+  computed: {
+    parsedStrengths() {
+      const list = this.profile.strengths || []
+      return list.map((raw) => {
+        const idx = raw.indexOf(' - ')
+        if (idx === -1) return { title: raw, desc: '' }
+        return {
+          title: raw.slice(0, idx).trim(),
+          desc: raw.slice(idx + 3).trim(),
+        }
+      })
+    },
+  },
 }
 </script>
 
-<style scoped src="../../assets/style/components/PersonalSection.css"></style>
+<style scoped src="../../assets/style/components/personal-section.css"></style>

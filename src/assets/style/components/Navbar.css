@@ -1,51 +1,72 @@
 .navbar {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 .navbar__inner {
-    max-width: 1200px;
-    margin: 0 auto;
-    height: 72px;
-    padding: 0 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 72px;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .navbar__logo {
-    font-size: 1.5rem;
-    font-weight: 800;
-    letter-spacing: -0.03em;
-    color: #111827;
-    text-decoration: none;
-    font-family: inherit;
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #111827;
+  text-decoration: none;
+  font-family: inherit;
 }
 
 .navbar__logo span {
-    color: #f97316;
+  color: #f97316;
 }
 
-.navbar__login-btn {
-    display: inline-flex;
-    align-items: center;
-    padding: 8px 18px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: #111827;
-    background: #f3f4f6;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    border-radius: 999px;
-    cursor: pointer;
-    transition: all 0.2s ease;
+.navbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.navbar__login-btn:hover {
-    background: #e5e7eb;
-    color: #000;
+.navbar__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 18px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  border-radius: 12px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.navbar__btn--signin {
+  color: #ffffff;
+  background: linear-gradient(to right, #f97316, #ea580c);
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.22);
+}
+
+.navbar__btn--signin:hover {
+  background: linear-gradient(to right, #ea580c, #c2410c);
+  box-shadow: 0 6px 16px rgba(249, 115, 22, 0.32);
+}
+
+.navbar__btn--signup {
+  color: #ffffff;
+  background: #111827;
+  box-shadow: 0 4px 12px rgba(17, 24, 39, 0.12);
+}
+
+.navbar__btn--signup:hover {
+  background: #1f2937;
 }

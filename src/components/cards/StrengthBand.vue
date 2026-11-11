@@ -35,4 +35,4 @@ export default {
 }
 </script>
 
-<style scoped src="../../assets/style/components/StrengthBand.css"></style>
+<style scoped src="../../assets/style/components/strength-band.css"></style>

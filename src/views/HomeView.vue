@@ -2,7 +2,7 @@
   <main>
     <Navbar />
     <HeroFrame id="about" :profile="profile" />
-    <StrengthBand :strengths="profile.strengths" />
+    <StrengthBand />
     <EducationSection id="edu" :education="profile.education" />
     <PersonalSection id="personal" :profile="profile" />
     <AppFooter id="contact" :profile="profile" />

@@ -3,7 +3,7 @@
   overflow: hidden;
   padding: 14px 0;
   border-top: 1px solid rgba(0, 0, 0, 0.06);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 .tech-band__track {
@@ -22,8 +22,8 @@
   align-items: center;
   padding: 6px 18px;
   margin: 0 8px;
-  background: rgba(0, 0, 0, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #f8fafc;
+  border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 999px;
   white-space: nowrap;
 }
