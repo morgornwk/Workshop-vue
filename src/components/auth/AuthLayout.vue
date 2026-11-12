@@ -13,7 +13,7 @@
       <div class="auth-orb auth-orb--bottom" aria-hidden="true"></div>
       <div class="auth-grid-bg" aria-hidden="true"></div>
 
-      <CoderScene3D />
+      <PokemonShowcase />
     </section>
 
     <!-- Right Form Panel -->
@@ -21,12 +21,13 @@
       <div class="auth-panel__inner">
         <!-- Mobile Header -->
         <div class="auth-mobile-brand">
-          <router-link to="/" class="auth-mobile-badge">
-            <v-icon size="24" color="white">mdi-code-tags</v-icon>
+          <router-link to="/shop" class="auth-mobile-logo-link">
+            <img
+              src="../../assets/images/logo.png"
+              alt="Pokémon Vault"
+              class="auth-mobile-logo"
+            />
           </router-link>
-          <h2 class="auth-mobile-title">
-            Mor<span>gorn</span> Portfolio
-          </h2>
         </div>
 
         <!-- Form Card -->
@@ -62,12 +63,13 @@
 
 <script>
 import AlertBanner from '@/components/common/AlertBanner.vue'
+import PokemonShowcase from '@/components/auth/PokemonShowcase.vue'
 
 export default {
   name: 'AuthLayout',
   components: {
     AlertBanner,
-    CoderScene3D: () => import('@/components/auth/CoderScene3D.vue'),
+    PokemonShowcase,
   },
   props: {
     title: { type: String, required: true },

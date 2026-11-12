@@ -1,5 +1,5 @@
 export const ALERT_META = {
-  success: { tag: 'OK!', title: 'สำเร็จ!' },
+  success: { tag: 'OK', title: 'สำเร็จ' },
   error: { tag: 'Error', title: 'เกิดข้อผิดพลาด' },
   warning: { tag: 'Warning', title: 'โปรดทราบ' },
   info: { tag: 'Info', title: 'แจ้งให้ทราบ' },

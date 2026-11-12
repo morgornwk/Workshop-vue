@@ -1,4 +1,4 @@
-const POKE_SPRITE_BASE = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon'
+export const POKE_SPRITE_BASE = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon'
 const POKE_API_LIST_URL = 'https://pokeapi.co/api/v2/pokemon?limit=1025&offset=0'
 
 function pokemonArtworkUrl(id) {
