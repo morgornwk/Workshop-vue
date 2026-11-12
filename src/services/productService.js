@@ -31,7 +31,7 @@ export async function fetchProducts() {
 
 export async function fetchProductById(id) {
   const res = await request(`/products/${encodeURIComponent(id)}`)
-  return res.data || null
+  return res.data
 }
 
 export async function createProduct(payload) {
@@ -39,12 +39,20 @@ export async function createProduct(payload) {
     method: 'POST',
     body: buildProductFormData(payload),
   })
-  return res.data || null
+  return res.data
+}
+
+export async function updateProduct(id, payload) {
+  const res = await request(`/products/${encodeURIComponent(id)}`, {
+    method: 'PUT',
+    body: buildProductFormData(payload)
+  })
+  return res.data
 }
 
 export async function deleteProduct(id) {
   const res = await request(`/products/${encodeURIComponent(id)}`, {
     method: 'DELETE',
   })
-  return res.data || null
+  return res.data
 }

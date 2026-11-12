@@ -4,7 +4,9 @@ import './registerServiceWorker'
 import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
+import '@mdi/font/css/materialdesignicons.min.css'
 import './assets/style/global.css'
+import './assets/style/common/card-alert.css'
 
 Vue.config.productionTip = false
 

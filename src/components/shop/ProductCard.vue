@@ -9,13 +9,13 @@
     </div>
 
     <div class="pcard__body">
-      <div class="pcard__set">{{ product.set_name }} {{ product.card_number }}</div>
-      <h3 class="pcard__name">{{ product.name }}</h3>
+      <div class="pcard__set" :title="setLabel">{{ setLabel || '\u00A0' }}</div>
+      <h3 class="pcard__name" :title="product.name">{{ product.name }}</h3>
     </div>
 
     <div class="pcard__foot">
       <div class="pcard__price-row">
-        <span class="kv-label">Vault price</span>
+        <span class="kv-label">Price</span>
         <div class="pcard__price">{{ priceText }}</div>
       </div>
       <div class="pcard__actions">
@@ -23,18 +23,30 @@
         <button class="kv-btn pcard__btn pcard__btn--add" :disabled="soldOut" @click="$emit('add', product)">
           {{ soldOut ? 'Sold' : 'Add to cart' }}
         </button>
-        <button
-          v-if="isAdmin"
-          type="button"
-          class="kv-btn pcard__btn pcard__btn--delete"
-          :disabled="deleting"
-          :aria-label="`Delete ${product.name}`"
-          title="Delete product"
-          @click="$emit('delete', product)"
-        >
-          <v-icon size="18">mdi-trash-can-outline</v-icon>
-          <span>Delete Product</span>
-        </button>
+        <template v-if="isAdmin">
+          <button
+            type="button"
+            class="kv-btn pcard__btn pcard__btn--edit"
+            :disabled="deleting"
+            :aria-label="`Edit ${product.name}`"
+            title="Edit product"
+            @click="$emit('edit', product)"
+          >
+            <v-icon size="18">mdi-pencil-outline</v-icon>
+            <span>Edit</span>
+          </button>
+          <button
+            type="button"
+            class="kv-btn pcard__btn pcard__btn--delete"
+            :disabled="deleting"
+            :aria-label="`Delete ${product.name}`"
+            title="Delete product"
+            @click="$emit('delete', product)"
+          >
+            <v-icon size="18">mdi-trash-can-outline</v-icon>
+            <span>Delete</span>
+          </button>
+        </template>
       </div>
     </div>
   </article>
@@ -53,13 +65,14 @@ export default {
   },
   computed: {
     soldOut() { return this.product.stock <= 0 },
+    setLabel() { return [this.product.set_name, this.product.card_number].filter(Boolean).join(' ') },
     tone() { return gradeBadgeTone(this.product.grade) },
     popText() { return formatPopulation(this.product.population) },
     imageSrc() { return resolveImageUrl(this.product.image) },
-    artStyle() { return { background: this.imageSrc ? '#f8fafc' : (this.product.art || '#cbd5e1') } },
+    artStyle() { return { background: this.imageSrc ? '#ffffff' : (this.product.art || '#cbd5e1') } },
     priceText() { return formatMoney(this.product.price) },
   },
 }
 </script>
 
-<style src="../../assets/style/components/product-card.css"></style>
+<style src="../../assets/style/shop/product-card.css"></style>

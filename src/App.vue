@@ -1,6 +1,7 @@
 <template>
   <v-app>
     <ToastAlert />
+    <AlertDialog />
     <v-main>
       <router-view />
     </v-main>
@@ -9,10 +10,11 @@
 
 <script>
 import ToastAlert from '@/components/common/ToastAlert.vue'
+import AlertDialog from '@/components/common/AlertDialog.vue'
 
 export default {
   name: 'AppRoot',
-  components: { ToastAlert },
+  components: { ToastAlert, AlertDialog },
 }
 </script>
 

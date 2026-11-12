@@ -7,33 +7,47 @@
         <v-icon small>mdi-arrow-left</v-icon>&nbsp;Back to Home
       </router-link>
 
-      <p v-if="loading" class="shop-vault__msg">Loading slab details...</p>
+      <p v-if="loading" class="shop-vault__msg">กำลังโหลดรายละเอียดสินค้า...</p>
 
-      <div v-else-if="error" class="detail__info detail__notice" role="alert">
-        <h2 class="detail__notice-title">
-          {{ errorStatus === 401 ? 'Sign in required' : errorStatus === 403 ? 'Account pending approval' : 'Unable to load product' }}
-        </h2>
-        <p class="detail__desc">{{ error }}</p>
-        <div class="detail__notice-actions">
+      <AlertNotice
+        v-else-if="error"
+        :type="noticeType"
+        :title="noticeTitle"
+        :message="noticeMessage"
+      >
+        <template #actions>
+          <router-link to="/shop" class="ca-btn ca-btn--notice-ghost">
+            กลับหน้าร้าน
+          </router-link>
           <router-link
             v-if="errorStatus === 401"
             :to="{ path: '/signin', query: { redirect: $route.fullPath } }"
-            class="kv-btn detail__add detail__notice-btn"
+            class="ca-btn ca-btn--notice-primary"
           >
-            Sign In
+            เข้าสู่ระบบ
           </router-link>
           <button
-            v-else
+            v-else-if="errorStatus !== 403"
             type="button"
-            class="kv-btn detail__add detail__notice-btn"
+            class="ca-btn ca-btn--notice-primary"
             @click="loadProduct(id)"
           >
-            Try Again
+            ลองอีกครั้ง
           </button>
-        </div>
-      </div>
+        </template>
+      </AlertNotice>
 
-      <p v-else-if="notFound" class="shop-vault__msg">Product not found or no longer available.</p>
+      <AlertBanner
+        v-else-if="notFound"
+        type="warning"
+        title="ไม่พบสินค้านี้"
+        message="ไม่พบข้อมูลสินค้านี้ หรือสินค้าถูกลบออกจากร้านค้าแล้ว"
+        class="detail__status-banner"
+      >
+        <template #actions>
+          <router-link to="/shop" class="ca-btn ca-btn--banner">กลับหน้าร้าน</router-link>
+        </template>
+      </AlertBanner>
 
       <div v-else-if="product" class="detail__grid">
         <div class="detail__media">
@@ -84,10 +98,6 @@
               {{ soldOut ? 'Out of Stock' : 'ADD TO CART' }}
             </button>
           </div>
-
-          <p v-if="added" class="detail__added" role="status">
-            Added {{ qty }} item(s) to cart · <router-link to="/cart" class="detail__cart-link">View Cart</router-link>
-          </p>
         </div>
       </div>
     </section>
@@ -104,29 +114,55 @@
 import { ref, computed, watch } from 'vue'
 import ShopNavbar from '@/components/shop/ShopNavbar.vue'
 import TornEdge from '@/components/shop/TornEdge.vue'
+import AlertBanner from '@/components/common/AlertBanner.vue'
+import AlertNotice from '@/components/common/AlertNotice.vue'
 import { useProduct } from '@/hook/useProducts'
 import { useCart } from '@/hook/useCart'
+import { useAlert } from '@/hook/useAlert'
 import { resolveImageUrl } from '@/services/api'
 import { formatMoney, formatPopulation, gradeBadgeTone } from '@/utils/format'
 
 export default {
   name: 'ProductDetailView',
-  components: { ShopNavbar, TornEdge },
+  components: { ShopNavbar, TornEdge, AlertBanner, AlertNotice },
   props: { id: { type: String, required: true } },
   setup(props) {
     const { product, loading, error, errorStatus, notFound, loadProduct } = useProduct(() => props.id)
     const { count: cartCount, add } = useCart()
+    const { warning } = useAlert()
 
     const qty = ref(1)
-    const added = ref(false)
+
+    watch(
+      errorStatus,
+      (status) => {
+        if (status === 401) {
+          warning('เข้าสู่ระบบเพื่อดูรายละเอียดและสั่งซื้อสินค้า', { title: 'กรุณาเข้าสู่ระบบก่อน' })
+        }
+      },
+      { immediate: true }
+    )
 
     watch(
       () => props.id,
       () => {
         qty.value = 1
-        added.value = false
       }
     )
+
+    const noticeType = computed(() =>
+      errorStatus.value === 401 || errorStatus.value === 403 ? 'warning' : 'error'
+    )
+    const noticeTitle = computed(() => {
+      if (errorStatus.value === 401) return 'กรุณาเข้าสู่ระบบก่อน'
+      if (errorStatus.value === 403) return 'บัญชีอยู่ระหว่างรออนุมัติ'
+      return 'ไม่สามารถโหลดข้อมูลสินค้าได้'
+    })
+    const noticeMessage = computed(() => {
+      if (errorStatus.value === 401) return 'กรุณาเข้าสู่ระบบเพื่อดูรายละเอียดและสั่งซื้อสินค้านี้'
+      if (errorStatus.value === 403) return 'กรุณารอผู้ดูแลระบบอนุมัติบัญชีก่อนเข้าดูรายละเอียดสินค้า'
+      return error.value
+    })
 
     const soldOut = computed(() => !product.value || product.value.stock <= 0)
     const tone = computed(() => gradeBadgeTone(product.value && product.value.grade))
@@ -135,9 +171,7 @@ export default {
     const priceText = computed(() => (product.value ? formatMoney(product.value.price) : ''))
 
     function addToCart() {
-      if (!product.value) return
-      add(product.value, qty.value)
-      added.value = true
+      if (product.value) add(product.value, qty.value)
     }
 
     return {
@@ -147,9 +181,11 @@ export default {
       errorStatus,
       notFound,
       loadProduct,
+      noticeType,
+      noticeTitle,
+      noticeMessage,
       qty,
       cartCount,
-      added,
       soldOut,
       tone,
       popText,
@@ -161,5 +197,5 @@ export default {
 }
 </script>
 
-<style src="../assets/style/shop-view.css"></style>
-<style src="../assets/style/components/product-detail.css"></style>
+<style src="../../assets/style/shop-view.css"></style>
+<style src="../../assets/style/shop/product-detail.css"></style>

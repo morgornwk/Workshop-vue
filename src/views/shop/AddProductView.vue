@@ -7,34 +7,29 @@
         <v-icon small>mdi-arrow-left</v-icon>&nbsp;Back to Home
       </router-link>
 
-      <div v-if="!isAuthenticated || !isAdmin" class="detail__info detail__notice" role="alert">
-        <h2 class="detail__notice-title">
-          {{ isAuthenticated ? 'Admin permission required' : 'Sign in required' }}
-        </h2>
-        <p class="detail__desc">
-          {{
-            isAuthenticated
-              ? 'Only administrator accounts can add new products to the shop.'
-              : 'Please sign in with an administrator account to create a product.'
-          }}
-        </p>
-        <div class="detail__notice-actions">
+      <AlertNotice
+        v-if="!isAuthenticated || !isAdmin"
+        :type="isAuthenticated ? 'error' : 'warning'"
+        :title="isAuthenticated ? 'สำหรับผู้ดูแลระบบเท่านั้น' : 'กรุณาเข้าสู่ระบบก่อน'"
+        :message="
+          isAuthenticated
+            ? 'เฉพาะบัญชีผู้ดูแลระบบเท่านั้นที่สามารถเพิ่มสินค้าใหม่ได้'
+            : 'กรุณาเข้าสู่ระบบด้วยบัญชีผู้ดูแลระบบก่อนเพิ่มสินค้า'
+        "
+      >
+        <template #actions>
+          <router-link to="/shop" class="ca-btn ca-btn--notice-ghost">
+            กลับหน้าร้าน
+          </router-link>
           <router-link
             v-if="!isAuthenticated"
             :to="{ path: '/signin', query: { redirect: '/add_product' } }"
-            class="kv-btn detail__add detail__notice-btn"
+            class="ca-btn ca-btn--notice-primary"
           >
-            Sign In
+            เข้าสู่ระบบ
           </router-link>
-          <router-link
-            v-else
-            to="/shop"
-            class="kv-btn detail__add detail__notice-btn"
-          >
-            Back to Shop
-          </router-link>
-        </div>
-      </div>
+        </template>
+      </AlertNotice>
 
       <form v-else class="detail__grid" novalidate @submit.prevent="handleSubmit">
         <div class="detail__media">
@@ -165,14 +160,14 @@
           <div class="detail__priceRow add-prod__price-row">
             <div class="add-prod__field add-prod__price-col">
               <label for="add-prod-price" class="kv-label">
-                Vault price (USD) <span class="add-prod__req">*</span>
+                Price (USD) <span class="add-prod__req">*</span>
               </label>
               <input
                 id="add-prod-price"
                 v-model="form.price"
                 type="number"
                 min="0"
-                step="0.01"
+                step="1"
                 class="add-prod__input"
                 placeholder="กรอกราคาขาย (USD) เช่น 280"
                 required
@@ -193,9 +188,12 @@
             </div>
           </div>
 
-          <p v-if="errorMsg" class="add-prod__error" role="alert">
-            {{ errorMsg }}
-          </p>
+          <AlertBanner
+            v-if="errorMsg"
+            type="error"
+            title="ไม่สามารถเพิ่มสินค้าได้"
+            :message="errorMsg"
+          />
 
           <div class="detail__buy">
             <router-link to="/shop" class="kv-btn add-prod__cancel">
@@ -222,65 +220,28 @@ import { ref, reactive, computed, onBeforeUnmount } from 'vue'
 import ShopNavbar from '@/components/shop/ShopNavbar.vue'
 import TornEdge from '@/components/shop/TornEdge.vue'
 import SlabImageCropper from '@/components/shop/SlabImageCropper.vue'
+import AlertBanner from '@/components/common/AlertBanner.vue'
+import AlertNotice from '@/components/common/AlertNotice.vue'
 import router from '@/router'
 import { useCart } from '@/hook/useCart'
 import { useAuth } from '@/hook/useAuth'
-import { useToast } from '@/hook/useToast'
+import { useAlert } from '@/hook/useAlert'
 import { createProduct } from '@/services/productService'
 import { formatPopulation, gradeBadgeTone } from '@/utils/format'
-
-const ALLOWED_IMAGE_RE = /\.(jpe?g|png|webp)$/i
-const MAX_SOURCE_BYTES = 15 * 1024 * 1024
-const MAX_UPLOAD_BYTES = 5 * 1024 * 1024
-const PREVIEW_BACKDROP = 'linear-gradient(135deg,#334155,#64748b)'
-
-function validateImageFile(file) {
-  if (!ALLOWED_IMAGE_RE.test(file.name)) {
-    return 'รองรับเฉพาะไฟล์รูป JPG, JPEG, PNG และ WEBP'
-  }
-  if (file.size > MAX_SOURCE_BYTES) {
-    return 'ไฟล์ต้นฉบับต้องมีขนาดไม่เกิน 15 MB'
-  }
-  return ''
-}
-
-function parseProductPayload(form) {
-  if (!form.name.trim()) {
-    return { error: 'กรุณากรอกชื่อสินค้า' }
-  }
-
-  const price = Number(form.price)
-  if (form.price === '' || !Number.isFinite(price) || price < 0) {
-    return { error: 'กรุณากรอกราคาให้ถูกต้อง (มากกว่าหรือเท่ากับ 0)' }
-  }
-
-  const stock = form.stock === '' ? 0 : Number(form.stock)
-  if (!Number.isFinite(stock) || stock < 0) {
-    return { error: 'กรุณากรอกจำนวนสินค้าให้ถูกต้อง' }
-  }
-
-  return {
-    payload: {
-      name: form.name.trim(),
-      set_name: form.set_name.trim(),
-      card_number: form.card_number.trim(),
-      grade: form.grade.trim(),
-      population: form.population.trim(),
-      description: form.description.trim(),
-      price,
-      stock: Math.floor(stock),
-      image: form.image,
-    },
-  }
-}
+import {
+  MAX_UPLOAD_BYTES,
+  PREVIEW_BACKDROP,
+  validateImageFile,
+  parseProductPayload,
+} from '@/utils/productForm'
 
 export default {
   name: 'AddProductView',
-  components: { ShopNavbar, TornEdge, SlabImageCropper },
+  components: { ShopNavbar, TornEdge, SlabImageCropper, AlertBanner, AlertNotice },
   setup() {
     const { count: cartCount } = useCart()
     const { isAuthenticated, isAdmin } = useAuth()
-    const { toastSuccess } = useToast()
+    const { success } = useAlert()
 
     const cropperRef = ref(null)
     const fileInputRef = ref(null)
@@ -362,7 +323,9 @@ export default {
         }
 
         await createProduct({ ...payload, image: uploadFile })
-        toastSuccess('เพิ่มสินค้าสำเร็จ!', `เพิ่ม "${payload.name}" เข้าสู่หน้าร้านเรียบร้อยแล้ว`)
+        success(`เพิ่ม "${payload.name}" เข้าสู่หน้าร้านเรียบร้อยแล้ว`, {
+          title: 'เพิ่มสินค้าสำเร็จ!',
+        })
         router.push('/shop').catch(() => {})
       } catch (err) {
         errorMsg.value = err.message || 'ไม่สามารถเพิ่มสินค้าได้ กรุณาลองใหม่'
@@ -394,6 +357,6 @@ export default {
 }
 </script>
 
-<style src="../assets/style/shop-view.css"></style>
-<style src="../assets/style/components/product-detail.css"></style>
-<style src="../assets/style/components/add-product.css"></style>
+<style src="../../assets/style/shop-view.css"></style>
+<style src="../../assets/style/shop/product-detail.css"></style>
+<style src="../../assets/style/shop/add-product.css"></style>

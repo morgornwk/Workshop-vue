@@ -54,16 +54,14 @@
   transform: translateY(-1px);
 }
 .shop-nav .shop-nav__actions .shop-nav__btn--account {
-  background: linear-gradient(135deg, #f97316, #ea580c);
+  background: linear-gradient(135deg, #111827);
   border-color: transparent;
   color: #ffffff;
-  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.24);
 }
 .shop-nav .shop-nav__actions .shop-nav__btn--account:hover {
-  background: linear-gradient(135deg, #ea580c, #c2410c);
+  background: linear-gradient(135deg, #111827);
   border-color: transparent;
   color: #ffffff;
-  box-shadow: 0 6px 16px rgba(249, 115, 22, 0.32);
 }
 .shop-nav .shop-nav__actions .shop-nav__btn .v-icon,
 .shop-nav .shop-nav__user .shop-nav__logout .v-icon {

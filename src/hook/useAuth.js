@@ -3,42 +3,39 @@ import { ref, computed } from 'vue'
 const TOKEN_KEY = 'kv_token'
 const USER_KEY = 'kv_user'
 
-const storage = {
-  get(key, fallback = null) {
-    try {
-      const item = localStorage.getItem(key)
-      return item ? JSON.parse(item) : fallback
-    } catch {
-      return fallback
-    }
-  },
-  set(key, value) {
-    try {
-      if (value) {
-        localStorage.setItem(key, JSON.stringify(value))
-      } else {
-        localStorage.removeItem(key)
-      }
-    } catch {
-      /* ignore storage errors */
-    }
-  },
+function readStorage(key, fallback) {
+  try {
+    const raw = localStorage.getItem(key)
+    return raw ? JSON.parse(raw) : fallback
+  } catch {
+    return fallback
+  }
 }
 
-// Shared reactive state so Navbar, Storefront, and Checkout read the same session.
-const token = ref(storage.get(TOKEN_KEY, ''))
-const user = ref(storage.get(USER_KEY, null))
+function writeStorage(key, value) {
+  try {
+    if (value) {
+      localStorage.setItem(key, JSON.stringify(value))
+    } else {
+      localStorage.removeItem(key)
+    }
+  } catch {
+    // Ignore storage errors when localStorage is unavailable.
+  }
+}
+
+// Shared reactive session state across Navbar, Storefront, API calls, and Checkout.
+const token = ref(readStorage(TOKEN_KEY, ''))
+const user = ref(readStorage(USER_KEY, null))
+const isAuthenticated = computed(() => Boolean(token.value))
+const isAdmin = computed(() => user.value?.role === 'admin')
 
 export function useAuth() {
-  const isAuthenticated = computed(() => Boolean(token.value))
-  const isApproved = computed(() => Boolean(user.value?.approve))
-  const isAdmin = computed(() => user.value?.role === 'admin')
-
   function setAuth({ token: newToken = '', user: newUser = null } = {}) {
     token.value = newToken
     user.value = newUser
-    storage.set(TOKEN_KEY, newToken)
-    storage.set(USER_KEY, newUser)
+    writeStorage(TOKEN_KEY, newToken)
+    writeStorage(USER_KEY, newUser)
   }
 
   function logout() {
@@ -49,7 +46,6 @@ export function useAuth() {
     token,
     user,
     isAuthenticated,
-    isApproved,
     isAdmin,
     setAuth,
     logout,

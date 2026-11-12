@@ -63,13 +63,24 @@
         </div>
 
         <p v-if="loading" class="shop-vault__msg">กำลังโหลดรายการการ์ด...</p>
-        <div v-else-if="error" class="shop-vault__msg shop-vault__msg--error">
-          <span>{{ error }}</span>
-          <button type="button" class="shop-vault__retry" @click="loadProducts">ลองใหม่</button>
-        </div>
-        <p v-else-if="!filtered.length" class="shop-vault__msg">
-          {{ products.length ? 'ไม่พบสินค้าที่ตรงกับคำค้นหา' : 'ยังไม่มีสินค้าในคลังขณะนี้' }}
-        </p>
+        <AlertBanner
+          v-else-if="error"
+          type="error"
+          title="ไม่สามารถโหลดรายการสินค้าได้"
+          :message="error"
+          class="shop-vault__banner"
+        >
+          <template #actions>
+            <button type="button" class="ca-btn ca-btn--banner" @click="loadProducts">ลองใหม่</button>
+          </template>
+        </AlertBanner>
+        <AlertBanner
+          v-else-if="!filtered.length"
+          type="info"
+          :title="products.length ? 'ไม่พบสินค้าที่ตรงกับคำค้นหา' : 'ยังไม่มีสินค้าในคลังขณะนี้'"
+          :message="products.length ? 'ลองเปลี่ยนคำค้นหาหรือตัวกรองความหายากดูอีกครั้ง' : 'กำลังเตรียมเติมสินค้าชุดใหม่เร็วๆ นี้'"
+          class="shop-vault__banner"
+        />
 
         <div v-else class="shop-vault__grid">
           <ProductCard
@@ -77,64 +88,15 @@
             :key="p._id"
             :product="p"
             :is-admin="isAdmin"
-            :deleting="deleting && Boolean(deleteTarget) && deleteTarget._id === p._id"
+            :deleting="deletingId === p._id"
             @add="addToCart"
             @view="viewProduct"
+            @edit="editProduct"
             @delete="askDeleteProduct"
           />
         </div>
       </div>
     </section>
-
-    <div
-      v-if="deleteTarget"
-      class="admin-modal-overlay"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="delete-product-title"
-      @click.self="closeDeleteModal"
-    >
-      <div class="admin-modal admin-modal--sm">
-        <header class="admin-modal__head">
-          <h2 id="delete-product-title" class="admin-modal__title">Delete Product</h2>
-          <button
-            type="button"
-            class="admin-modal__close"
-            :disabled="deleting"
-            aria-label="Close modal"
-            @click="closeDeleteModal"
-          >
-            <v-icon size="20">mdi-close</v-icon>
-          </button>
-        </header>
-        <div class="admin-modal__body">
-          <div v-if="deleteError" class="admin-modal__alert" role="alert">
-            {{ deleteError }}
-          </div>
-          <p class="admin-modal__confirm-text">
-            Are you sure you want to remove <strong>{{ deleteTarget.name }}</strong> from the shop?
-          </p>
-        </div>
-        <footer class="admin-modal__foot">
-          <button
-            type="button"
-            class="admin-modal__btn admin-modal__btn--cancel"
-            :disabled="deleting"
-            @click="closeDeleteModal"
-          >
-            Cancel
-          </button>
-          <button
-            type="button"
-            class="admin-modal__btn admin-modal__btn--danger"
-            :disabled="deleting"
-            @click="confirmDeleteProduct"
-          >
-            {{ deleting ? 'Deleting...' : 'Delete' }}
-          </button>
-        </footer>
-      </div>
-    </div>
 
     <TornEdge fill="#212121" :seed="8" />
     <footer class="shop-foot">
@@ -144,31 +106,33 @@
           v-for="mon in buddySprites"
           :key="mon.id"
           :src="mon.src"
+          :title="mon.name"
           alt=""
           class="shop-foot__sprite"
         />
       </div>
-      <span>© 2026 Morgorn. All rights reserved.</span>
+      <span class="shop-foot__copy">© 2026 Morgorn. All rights reserved.</span>
     </footer>
   </div>
 </template>
 
 <script>
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ref } from 'vue'
 import ShopNavbar from '@/components/shop/ShopNavbar.vue'
 import ShopHero from '@/components/shop/ShopHero.vue'
 import TornEdge from '@/components/shop/TornEdge.vue'
 import ProductCard from '@/components/shop/ProductCard.vue'
+import AlertBanner from '@/components/common/AlertBanner.vue'
 import router from '@/router'
 import { useProducts, FILTERS } from '@/hook/useProducts'
 import { useCart } from '@/hook/useCart'
 import { useAuth } from '@/hook/useAuth'
-import { useToast } from '@/hook/useToast'
+import { useAlert } from '@/hook/useAlert'
 import { FOOTER_BUDDY_SPRITES } from '@/services/pokemonSprites'
 
 export default {
   name: 'ShopView',
-  components: { ShopNavbar, ShopHero, TornEdge, ProductCard },
+  components: { ShopNavbar, ShopHero, TornEdge, ProductCard, AlertBanner },
   setup() {
     const {
       products,
@@ -182,51 +146,35 @@ export default {
     } = useProducts()
     const { count: cartCount, add: addToCart, remove: removeFromCart } = useCart()
     const { isAdmin } = useAuth()
-    const { toastSuccess } = useToast()
+    const { success, error: errorToast, confirm } = useAlert()
 
-    const deleteTarget = ref(null)
-    const deleting = ref(false)
-    const deleteError = ref('')
+    const deletingId = ref('')
 
     const viewProduct = (p) => router.push(`/shop/${p._id}`)
+    const editProduct = (p) => router.push(`/edit_product/${p._id}`)
 
-    function askDeleteProduct(product) {
-      deleteError.value = ''
-      deleteTarget.value = product
-    }
+    async function askDeleteProduct(product) {
+      if (!product || deletingId.value) return
+      const ok = await confirm({
+        type: 'error',
+        title: 'ลบสินค้านี้ใช่ไหม?',
+        message: `ต้องการลบ "${product.name}" ออกจากร้านค้าหรือไม่`,
+        confirmText: 'ลบสินค้า',
+        cancelText: 'ยกเลิก',
+      })
+      if (!ok) return
 
-    function closeDeleteModal() {
-      if (deleting.value) return
-      deleteTarget.value = null
-      deleteError.value = ''
-    }
-
-    async function confirmDeleteProduct() {
-      if (!deleteTarget.value || deleting.value) return
-      deleting.value = true
-      deleteError.value = ''
-      const targetId = deleteTarget.value._id
-      const targetName = deleteTarget.value.name
+      deletingId.value = product._id
       try {
-        await removeProduct(targetId)
-        removeFromCart(targetId)
-        deleteTarget.value = null
-        toastSuccess('ลบสินค้าเรียบร้อย', `ลบ "${targetName}" ออกจากร้านค้าแล้ว`)
+        await removeProduct(product._id)
+        removeFromCart(product._id)
+        success(`ลบ "${product.name}" ออกจากร้านค้าแล้ว`, { title: 'ลบสินค้าเรียบร้อย' })
       } catch (err) {
-        deleteError.value = err.message || 'Unable to delete product'
+        errorToast(err.message || 'ไม่สามารถลบสินค้าได้', { title: 'ลบสินค้าไม่สำเร็จ' })
       } finally {
-        deleting.value = false
+        deletingId.value = ''
       }
     }
-
-    function onKeyDown(e) {
-      if (e.key === 'Escape' && deleteTarget.value) {
-        closeDeleteModal()
-      }
-    }
-
-    onMounted(() => window.addEventListener('keydown', onKeyDown))
-    onBeforeUnmount(() => window.removeEventListener('keydown', onKeyDown))
 
     return {
       products,
@@ -239,19 +187,15 @@ export default {
       FILTERS,
       cartCount,
       isAdmin,
+      deletingId,
       addToCart,
       viewProduct,
-      deleteTarget,
-      deleting,
-      deleteError,
+      editProduct,
       askDeleteProduct,
-      closeDeleteModal,
-      confirmDeleteProduct,
       buddySprites: FOOTER_BUDDY_SPRITES,
     }
   },
 }
 </script>
 
-<style src="../assets/style/shop-view.css"></style>
-<style src="../assets/style/components/product-modal.css"></style>
+<style src="../../assets/style/shop-view.css"></style>

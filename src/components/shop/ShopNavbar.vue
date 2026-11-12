@@ -1,8 +1,8 @@
 <template>
   <header class="shop-nav">
-    <router-link to="/shop" class="shop-nav__brand">
+    <a href="#" class="shop-nav__brand">
       <img src="../../assets/images/logo.png" alt="" class="shop-nav__logo" />
-    </router-link>
+    </a>
 
     <div class="shop-nav__actions">
       <router-link to="/cart" class="shop-nav__btn" :aria-label="`Shopping cart (${cartCount} items)`">
@@ -30,7 +30,7 @@
             title="Sign out"
             @click="handleLogout"
           >
-            <v-icon size="18">mdi-logout</v-icon>
+          <v-icon size="18">mdi-logout</v-icon>
           </button>
         </div>
       </template>
@@ -51,6 +51,7 @@
 import { computed } from 'vue'
 import router from '@/router'
 import { useAuth } from '@/hook/useAuth'
+import { useSignOut } from '@/hook/useSignOut'
 
 export default {
   name: 'ShopNavbar',
@@ -58,7 +59,12 @@ export default {
     cartCount: { type: Number, default: 0 },
   },
   setup() {
-    const { user, isAuthenticated, logout } = useAuth()
+    const { user, isAuthenticated } = useAuth()
+    const { confirmSignOut } = useSignOut(() => {
+      if (router.currentRoute.name === 'product-detail') {
+        router.push('/shop').catch(() => {})
+      }
+    })
     const username = computed(() => (user.value && user.value.username) || 'Member')
     const signInRoute = computed(() => {
       const fullPath = router.currentRoute.fullPath
@@ -67,16 +73,14 @@ export default {
         : '/signin'
     })
 
-    function handleLogout() {
-      logout()
-      if (router.currentRoute.name === 'product-detail') {
-        router.push('/shop').catch(() => {})
-      }
+    return {
+      isAuthenticated,
+      username,
+      signInRoute,
+      handleLogout: confirmSignOut,
     }
-
-    return { isAuthenticated, username, signInRoute, handleLogout }
   },
 }
 </script>
 
-<style src="../../assets/style/components/shop-navbar.css"></style>
+<style src="../../assets/style/shop/shop-navbar.css"></style>

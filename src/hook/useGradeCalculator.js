@@ -1,6 +1,5 @@
 import { ref } from 'vue'
 
-
 export function useGradeCalculator() {
   const formRef = ref(null)
   const score = ref('')

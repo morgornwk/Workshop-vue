@@ -226,7 +226,7 @@
   border-radius: 10px;
   background: #ffffff;
   color: #111827;
-  font: 600 0.95rem / 1.4 var(--kv-font-body, 'Inter', sans-serif);
+  font: 600 0.95rem / 1.4 var(--kv-font-body, 'Noto Sans Thai', 'Inter', sans-serif);
   transition: border-color 0.15s ease;
 }
 
@@ -241,7 +241,6 @@
   border: 0;
   border-radius: 0;
   background: transparent;
-  font: 700 1rem / 1.4 'Space Grotesk', sans-serif;
 }
 
 .add-prod__input::placeholder,
@@ -282,17 +281,6 @@
 .add-prod__price-col,
 .add-prod__stock-col {
   min-width: 0;
-}
-
-.add-prod__error {
-  margin: 0;
-  padding: 10px 12px;
-  border-radius: 10px;
-  background: #fef2f2;
-  border: 1px solid #fecaca;
-  color: #b91c1c;
-  font-size: 0.86rem;
-  font-weight: 600;
 }
 
 .shop-page .add-prod__cancel {

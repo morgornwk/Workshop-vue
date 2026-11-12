@@ -3,7 +3,7 @@
     <div
       ref="stageRef"
       class="detail__art cropper__stage"
-      :class="{ 'cropper__stage--active': Boolean(imageUrl), 'cropper__stage--dragging': dragging }"
+      :class="{ 'cropper__stage--active': Boolean(imageUrl && cropEnabled), 'cropper__stage--dragging': dragging }"
       :style="{ background: imageUrl ? '#f8fafc' : fallbackBackdrop }"
       @pointerdown="startDrag"
     >
@@ -28,12 +28,12 @@
       </span>
       <span v-if="popText" class="detail__pop">POP {{ popText }}</span>
 
-      <div v-if="imageUrl" class="cropper__guide" aria-hidden="true">
+      <div v-if="imageUrl && cropEnabled" class="cropper__guide" aria-hidden="true">
         <span>ลากเพื่อจัดตำแหน่งรูป</span>
       </div>
     </div>
 
-    <div v-if="imageUrl" class="cropper__toolbar">
+    <div v-if="imageUrl && cropEnabled" class="cropper__toolbar">
       <div class="cropper__zoom-row">
         <v-icon size="18" color="#6b7280">mdi-magnify-minus-outline</v-icon>
         <input
@@ -71,6 +71,7 @@ export default {
   name: 'SlabImageCropper',
   props: {
     imageUrl: { type: String, default: '' },
+    cropEnabled: { type: Boolean, default: true},
     fileName: { type: String, default: 'card' },
     alt: { type: String, default: 'Preview' },
     grade: { type: String, default: '' },
@@ -157,11 +158,11 @@ export default {
       measureStage()
       natW.value = img.naturalWidth
       natH.value = img.naturalHeight
-      setFitMode('cover')
+      setFitMode(props.cropEnabled ? 'cover' : 'contain')
     }
 
     function startDrag(e) {
-      if (!props.imageUrl || !natW.value) return
+      if (!props.cropEnabled || !props.imageUrl || !natW.value) return
       e.preventDefault()
       dragging.value = true
       dragStartX = e.clientX

@@ -107,4 +107,4 @@ export default {
 }
 </script>
 
-<style src="../../assets/style/components/shop-hero.css"></style>
+<style src="../../assets/style/shop/shop-hero.css"></style>

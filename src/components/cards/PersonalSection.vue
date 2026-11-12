@@ -118,4 +118,4 @@ export default {
 }
 </script>
 
-<style scoped src="../../assets/style/components/personal-section.css"></style>
+<style scoped src="../../assets/style/cards/personal-section.css"></style>

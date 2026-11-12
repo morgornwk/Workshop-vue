@@ -5,8 +5,7 @@
     footer-text="Don't have an account?"
     footer-action-text="Sign up"
     footer-route="/signup"
-    :error="error"
-    :success-msg="successMsg"
+    :alert="alert"
   >
     <SignInForm :loading="loading" @submit="submit" />
   </AuthLayout>
@@ -24,7 +23,9 @@ export default {
   components: { AuthLayout, SignInForm },
   setup() {
     return useAuthSubmit(signIn, {
-      successPrefix: 'เข้าสู่ระบบสำเร็จ ยินดีต้อนรับ',
+      successTitle: 'เข้าสู่ระบบสำเร็จ!',
+      errorTitle: 'เข้าสู่ระบบไม่สำเร็จ',
+      pendingApprovalWarning: true,
       onComplete: () => {
         const redirect = router.currentRoute.query.redirect || '/shop'
         router.push(redirect).catch(() => {})

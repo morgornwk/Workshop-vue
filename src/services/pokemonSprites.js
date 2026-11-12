@@ -64,11 +64,26 @@ export async function fetchPokedexEntries(count = 20) {
   }
 }
 
-export const FOOTER_BUDDY_SPRITES = [
-  { id: 1, name: 'Bulbasaur', src: pokemonAnimatedSpriteUrl(1) },
-  { id: 4, name: 'Charmander', src: pokemonAnimatedSpriteUrl(4) },
-  { id: 7, name: 'Squirtle', src: pokemonAnimatedSpriteUrl(7) },
-  { id: 25, name: 'Pikachu', src: pokemonAnimatedSpriteUrl(25) },
-  { id: 94, name: 'Gengar', src: pokemonAnimatedSpriteUrl(94) },
-  { id: 151, name: 'Mew', src: pokemonAnimatedSpriteUrl(151) },
+const FOOTER_BUDDIES = [
+  [1, 'Bulbasaur'],
+  [4, 'Charmander'],
+  [7, 'Squirtle'],
+  [25, 'Pikachu'],
+  [39, 'Jigglypuff'],
+  [54, 'Psyduck'],
+  [94, 'Gengar'],
+  [131, 'Lapras'],
+  [133, 'Eevee'],
+  [143, 'Snorlax'],
+  [149, 'Dragonite'],
+  [150, 'Mewtwo'],
+  [151, 'Mew'],
+  [448, 'Lucario'],
+  [492, 'Shaymin'],
 ]
+
+export const FOOTER_BUDDY_SPRITES = FOOTER_BUDDIES.map(([id, name]) => ({
+  id,
+  name,
+  src: pokemonAnimatedSpriteUrl(id),
+}))

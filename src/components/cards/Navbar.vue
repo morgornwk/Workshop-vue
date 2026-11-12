@@ -11,7 +11,7 @@
             Shop
           </router-link>
           <span class="navbar__user">{{ username }}</span>
-          <button type="button" class="navbar__btn navbar__btn--signup" @click="logout">
+          <button type="button" class="navbar__btn navbar__btn--signup" @click="handleLogout">
             Sign Out
           </button>
         </template>
@@ -31,15 +31,17 @@
 <script>
 import { computed } from 'vue'
 import { useAuth } from '@/hook/useAuth'
+import { useSignOut } from '@/hook/useSignOut'
 
 export default {
   name: 'AppNavbar',
   setup() {
-    const { user, isAuthenticated, logout } = useAuth()
+    const { user, isAuthenticated } = useAuth()
+    const { confirmSignOut } = useSignOut()
     const username = computed(() => (user.value && user.value.username) || 'Member')
-    return { isAuthenticated, username, logout }
+    return { isAuthenticated, username, handleLogout: confirmSignOut }
   },
 }
 </script>
 
-<style scoped src="../../assets/style/components/navbar.css"></style>
+<style scoped src="../../assets/style/cards/navbar.css"></style>

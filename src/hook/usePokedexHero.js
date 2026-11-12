@@ -1,6 +1,9 @@
 import { ref, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import { fetchPokedexEntries } from '@/services/pokemonSprites'
 
+const ENTRY_COUNT = 20
+const SCROLL_SPEED = 46
+
 function preloadImage(url) {
   return new Promise((resolve) => {
     const img = new Image()
@@ -11,6 +14,62 @@ function preloadImage(url) {
   })
 }
 
+function prefersReducedMotion() {
+  return (
+    typeof window !== 'undefined' &&
+    Boolean(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)
+  )
+}
+
+function wrapItemX(index, stride, offset, span, thumbSize) {
+  let x = (((index * stride + offset) % span) + span) % span
+  if (x >= span - thumbSize) x -= span
+  return x
+}
+
+function alignRowOffset(count, offset, { stride, thumbSize, midX }) {
+  if (!count || !stride) return offset
+  const span = count * stride
+  let bestDelta = Infinity
+  for (let i = 0; i < count; i++) {
+    const x = wrapItemX(i, stride, offset, span, thumbSize)
+    const delta = x + thumbSize / 2 - midX
+    if (Math.abs(delta) < Math.abs(bestDelta)) bestDelta = delta
+  }
+  return offset - bestDelta
+}
+
+function positionRow(row, { stride, thumbSize }) {
+  const count = row.items.value.length
+  if (!count || !stride) return
+
+  const span = count * stride
+  const topY = row.yCenter - thumbSize / 2
+  for (let i = 0; i < count; i++) {
+    const el = row.els[i]
+    if (!el) continue
+    const x = wrapItemX(i, stride, row.offset, span, thumbSize)
+    el.style.transform = `translate3d(${x}px, ${topY}px, 0)`
+    row.centers[i] = x + thumbSize / 2
+  }
+}
+
+function findClosestLoaded(items, centers, loadedMap, midX) {
+  let bestItem = null
+  let bestDist = Infinity
+  for (let i = 0; i < centers.length; i++) {
+    const item = items[i]
+    if (!item || !loadedMap[item.id]) continue
+    const dist = Math.abs(centers[i] - midX)
+    if (dist < bestDist) {
+      bestDist = dist
+      bestItem = item
+    }
+  }
+  return { item: bestItem, dist: bestDist }
+}
+
+// Drive the dual-row Pokédex carousel animation and center spotlight feature in ShopHero.
 export function usePokedexHero(stageRef) {
   const topPokemons = ref([])
   const bottomPokemons = ref([])
@@ -27,113 +86,62 @@ export function usePokedexHero(stageRef) {
     const stage = stageRef.value
     if (!stage) return
 
-    const reducedMotion =
-      typeof window !== 'undefined' &&
-      window.matchMedia &&
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches
-
-    let topEls = []
-    let botEls = []
-    let topCenters = []
-    let botCenters = []
-    let thumbSize = 84
-    let stride = 128
-    let midX = 0
-    let topY = 0
-    let botY = 0
-    let topOffset = 0
-    let botOffset = 0
+    const reducedMotion = prefersReducedMotion()
+    const metrics = { thumbSize: 84, stride: 128, midX: 0 }
     let currentKey = ''
 
-    const collectElements = () => {
-      topEls = Array.from(stage.querySelectorAll('.pokedex-kv__thumb--top'))
-      botEls = Array.from(stage.querySelectorAll('.pokedex-kv__thumb--bot'))
-      topCenters = Array(topPokemons.value.length).fill(0)
-      botCenters = Array(bottomPokemons.value.length).fill(0)
-    }
+    const rows = [
+      { key: 'top', selector: '.pokedex-kv__thumb--top', items: topPokemons, dir: -1, stagger: 0, els: [], centers: [], offset: 0, yCenter: 0 },
+      { key: 'bot', selector: '.pokedex-kv__thumb--bot', items: bottomPokemons, dir: 1, stagger: 0.5, els: [], centers: [], offset: 0, yCenter: 0 },
+    ]
 
-    const alignOffset = (count, offset) => {
-      if (!count || !stride) return offset
-      const span = count * stride
-      let best = Infinity
-      for (let i = 0; i < count; i++) {
-        let x = ((i * stride + offset) % span + span) % span
-        if (x >= span - thumbSize) x -= span
-        const delta = x + thumbSize / 2 - midX
-        if (Math.abs(delta) < Math.abs(best)) best = delta
-      }
-      return offset - best
+    const setFeatured = (item, key) => {
+      if (!item || key === currentKey) return
+      currentKey = key
+      featured.value = item
+      featuredKey.value = key
     }
 
     const measure = () => {
       const width = stage.clientWidth
       const height = stage.clientHeight || 340
       const isMobile = width <= 768
-      midX = width / 2
-      thumbSize = Math.round(height * (isMobile ? 0.25 : 0.27))
-      stride = Math.round(thumbSize * (isMobile ? 1.35 : 1.38))
-      topY = Math.round(height * (isMobile ? 0.145 : 0.16))
-      botY = Math.round(height * (isMobile ? 0.855 : 0.84))
 
-      for (const el of topEls) {
-        el.style.width = `${thumbSize}px`
-        el.style.height = `${thumbSize}px`
-      }
-      for (const el of botEls) {
-        el.style.width = `${thumbSize}px`
-        el.style.height = `${thumbSize}px`
-      }
-    }
+      metrics.midX = width / 2
+      metrics.thumbSize = Math.round(height * (isMobile ? 0.25 : 0.27))
+      metrics.stride = Math.round(metrics.thumbSize * (isMobile ? 1.35 : 1.38))
 
-    const positionRow = (els, count, offset, yCenter, centers) => {
-      if (!count || !stride) return
-      const span = count * stride
-      for (let i = 0; i < count; i++) {
-        const el = els[i]
-        if (!el) continue
-        let x = ((i * stride + offset) % span + span) % span
-        if (x >= span - thumbSize) x -= span
-        el.style.transform = `translate3d(${x}px, ${yCenter - thumbSize / 2}px, 0)`
-        centers[i] = x + thumbSize / 2
-      }
-    }
+      rows[0].yCenter = Math.round(height * (isMobile ? 0.145 : 0.16))
+      rows[1].yCenter = Math.round(height * (isMobile ? 0.855 : 0.84))
 
-    const findClosestLoaded = (items, centers) => {
-      let bestIdx = -1
-      let bestDist = Infinity
-      const loaded = loadedMap.value
-      for (let i = 0; i < centers.length; i++) {
-        const item = items[i]
-        if (!item || !loaded[item.id]) continue
-        const d = Math.abs(centers[i] - midX)
-        if (d < bestDist) {
-          bestDist = d
-          bestIdx = i
+      for (const row of rows) {
+        for (const el of row.els) {
+          el.style.width = `${metrics.thumbSize}px`
+          el.style.height = `${metrics.thumbSize}px`
         }
       }
-      return { bestIdx, bestDist }
     }
 
-    const pickClosestFeatured = () => {
-      const topPick = findClosestLoaded(topPokemons.value, topCenters)
-      const botPick = findClosestLoaded(bottomPokemons.value, botCenters)
-      if (topPick.bestIdx < 0 && botPick.bestIdx < 0) return
-
-      const useTop = topPick.bestDist <= botPick.bestDist
-      const item = useTop
-        ? topPokemons.value[topPick.bestIdx]
-        : bottomPokemons.value[botPick.bestIdx]
-      if (!item) return
-
-      const nextKey = `${useTop ? 'top' : 'bot'}-${item.id}`
-      if (nextKey !== currentKey) {
-        currentKey = nextKey
-        featured.value = item
-        featuredKey.value = nextKey
+    const alignRows = () => {
+      for (const row of rows) {
+        row.offset = alignRowOffset(row.items.value.length, row.offset, metrics) + metrics.stride * row.stagger
       }
     }
 
-    const entries = await fetchPokedexEntries(20)
+    const updateFeatured = () => {
+      let bestPick = null
+      let bestRowKey = ''
+      for (const row of rows) {
+        const pick = findClosestLoaded(row.items.value, row.centers, loadedMap.value, metrics.midX)
+        if (pick.item && (!bestPick || pick.dist < bestPick.dist)) {
+          bestPick = pick
+          bestRowKey = row.key
+        }
+      }
+      if (bestPick) setFeatured(bestPick.item, `${bestRowKey}-${bestPick.item.id}`)
+    }
+
+    const entries = await fetchPokedexEntries(ENTRY_COUNT)
     if (!mounted) return
 
     const half = Math.floor(entries.length / 2)
@@ -146,40 +154,33 @@ export function usePokedexHero(stageRef) {
       preloadImage(entry.image).then((ok) => {
         if (!mounted || !ok) return
         loadedMap.value = { ...loadedMap.value, [entry.id]: true }
-        if (!featured.value) {
-          currentKey = `init-${entry.id}`
-          featured.value = entry
-          featuredKey.value = currentKey
-        }
+        if (!featured.value) setFeatured(entry, `init-${entry.id}`)
       })
     })
 
     await nextTick()
     if (!mounted) return
 
-    collectElements()
+    for (const row of rows) {
+      row.els = Array.from(stage.querySelectorAll(row.selector))
+      row.centers = Array(row.items.value.length).fill(0)
+    }
+
     measure()
-    topOffset = alignOffset(topPokemons.value.length, 0)
-    botOffset = alignOffset(bottomPokemons.value.length, 0) + stride * 0.5
-    positionRow(topEls, topPokemons.value.length, topOffset, topY, topCenters)
-    positionRow(botEls, bottomPokemons.value.length, botOffset, botY, botCenters)
-    pickClosestFeatured()
+    alignRows()
+    rows.forEach((row) => positionRow(row, metrics))
+    updateFeatured()
 
     let last = performance.now()
     const tick = (now) => {
       const dt = Math.min(0.05, (now - last) / 1000)
       last = now
 
-      if (!reducedMotion) {
-        const step = 46 * dt
-        topOffset -= step
-        botOffset += step
+      for (const row of rows) {
+        if (!reducedMotion) row.offset += row.dir * SCROLL_SPEED * dt
+        positionRow(row, metrics)
       }
-
-      positionRow(topEls, topPokemons.value.length, topOffset, topY, topCenters)
-      positionRow(botEls, bottomPokemons.value.length, botOffset, botY, botCenters)
-      pickClosestFeatured()
-
+      updateFeatured()
       rafId = requestAnimationFrame(tick)
     }
 
@@ -188,8 +189,7 @@ export function usePokedexHero(stageRef) {
     if (typeof ResizeObserver !== 'undefined') {
       observer = new ResizeObserver(() => {
         measure()
-        topOffset = alignOffset(topPokemons.value.length, topOffset)
-        botOffset = alignOffset(bottomPokemons.value.length, botOffset) + stride * 0.5
+        alignRows()
       })
       observer.observe(stage)
     }

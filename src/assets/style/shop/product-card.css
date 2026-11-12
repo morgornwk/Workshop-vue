@@ -1,25 +1,25 @@
 .pcard {
-  background: #fff;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.1);
+  background: #fcf6e8;
+  border: 1px solid #eadec6;
+  box-shadow: 0 8px 20px rgba(33, 33, 33, 0.1);
   border-radius: 20px;
-  padding: 18px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
   height: 100%;
   box-sizing: border-box;
   transition: transform 0.22s ease, box-shadow 0.22s ease;
 }
 .pcard:hover {
   transform: translateY(-4px);
-  box-shadow: 0 16px 32px rgba(15, 23, 42, 0.16);
+  box-shadow: 0 16px 32px rgba(33, 33, 33, 0.16);
 }
 .pcard__art {
   position: relative;
   width: 100%;
   aspect-ratio: 3 / 5;
-  border: 1px solid #f1f5f9;
+  border: 1px solid #ede4d0;
   border-radius: 14px;
   box-sizing: border-box;
   display: flex;
@@ -69,24 +69,30 @@
 .pcard__body {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
+  padding: 2px 2px 0;
   flex: 1;
 }
 .pcard__set {
-  font: 600 0.74rem / 1.25 'Space Grotesk', sans-serif;
+  font: 600 0.72rem / 1.25 'Space Grotesk', sans-serif;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: #f97316;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .pcard__name {
   margin: 0;
-  font: 700 1.3rem / 1.3 var(--kv-font-display);
+  font: 700 1.15rem / 1.32 var(--kv-font-display);
   color: #111827;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
 }
 .pcard__foot {
   margin-top: auto;
-  padding-top: 14px;
-  border-top: 1px solid #e5e7eb;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -96,12 +102,13 @@
   align-items: baseline;
   justify-content: space-between;
   gap: 12px;
+  padding: 2px 2px 0;
 }
 .pcard__price-row .kv-label {
   color: #6b7280;
 }
 .pcard__price {
-  font: 700 1.78rem / 1.1 var(--kv-font-display);
+  font: 700 1.5rem / 1.1 var(--kv-font-display);
   color: #ea580c;
 }
 .pcard__actions {
@@ -143,11 +150,23 @@
   box-shadow: none;
   cursor: not-allowed;
 }
+.shop-page .pcard__btn.pcard__btn--edit,
 .shop-page .pcard__btn.pcard__btn--delete {
-  grid-column: 1 / -1;
   min-height: 40px;
   padding: 0 12px;
   gap: 6px;
+}
+.shop-page .pcard__btn.pcard__btn--edit {
+  background: #ffffff;
+  color: #111827;
+  border: 1.5px solid #e5dcc8;
+}
+.shop-page .pcard__btn.pcard__btn--edit:hover:not(:disabled) {
+  background: #fff7ed;
+  border-color: #f97316;
+  color: #ea580c;
+}
+.shop-page .pcard__btn.pcard__btn--delete {
   background: #fef2f2;
   color: #dc2626;
   border: 1.5px solid #fecaca;
@@ -157,10 +176,12 @@
   border-color: #ef4444;
   color: #b91c1c;
 }
+.shop-page .pcard__btn.pcard__btn--edit:disabled,
 .shop-page .pcard__btn.pcard__btn--delete:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
+.shop-page .pcard__btn--edit .v-icon,
 .shop-page .pcard__btn--delete .v-icon {
   color: inherit;
 }

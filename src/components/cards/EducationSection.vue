@@ -40,4 +40,4 @@ export default {
 }
 </script>
 
-<style scoped src="../../assets/style/components/education-section.css"></style>
+<style scoped src="../../assets/style/cards/education-section.css"></style>

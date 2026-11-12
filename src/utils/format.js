@@ -1,8 +1,12 @@
 // Format numeric values consistently across shop views and cart components.
 export function formatMoney(amount) {
-  return Number(amount || 0).toLocaleString('en-US', {
+  const parsed = Number(amount)
+  const value = Number.isFinite(parsed) ? parsed : 0
+  return value.toLocaleString('en-US', {
     style: 'currency',
     currency: 'USD',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
   })
 }
 

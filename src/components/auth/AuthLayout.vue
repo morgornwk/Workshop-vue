@@ -38,15 +38,13 @@
             <p class="auth-card__sub">{{ subtitle }}</p>
           </div>
 
-          <div v-if="error" class="auth-alert auth-alert--error">
-            <v-icon size="18" color="#b91c1c">mdi-alert-circle</v-icon>
-            <span>{{ error }}</span>
-          </div>
-
-          <div v-if="successMsg" class="auth-alert auth-alert--success">
-            <v-icon size="18" color="#15803d">mdi-check-circle</v-icon>
-            <span>{{ successMsg }}</span>
-          </div>
+          <AlertBanner
+            v-if="alert"
+            :type="alert.type"
+            :title="alert.title"
+            :message="alert.message"
+            class="auth-layout__alert"
+          />
 
           <slot />
 
@@ -63,9 +61,12 @@
 </template>
 
 <script>
+import AlertBanner from '@/components/common/AlertBanner.vue'
+
 export default {
   name: 'AuthLayout',
   components: {
+    AlertBanner,
     CoderScene3D: () => import('@/components/auth/CoderScene3D.vue'),
   },
   props: {
@@ -74,8 +75,7 @@ export default {
     footerText: { type: String, required: true },
     footerActionText: { type: String, required: true },
     footerRoute: { type: String, required: true },
-    error: { type: String, default: '' },
-    successMsg: { type: String, default: '' },
+    alert: { type: Object, default: null },
   },
 }
 </script>

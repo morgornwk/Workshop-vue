@@ -33,4 +33,4 @@ export default {
 }
 </script>
 
-<style scoped src="../../assets/style/components/hero-frame.css"></style>
+<style scoped src="../../assets/style/cards/hero-frame.css"></style>

@@ -9,17 +9,8 @@ export function useAuthForm() {
   })
 
   function validate() {
-    errors.name = ''
-    errors.password = ''
-
-    if (!name.value.trim()) {
-      errors.name = 'กรุณากรอก Username'
-    }
-
-    if (!password.value) {
-      errors.password = 'กรุณากรอก Password'
-    }
-
+    errors.name = name.value.trim() ? '' : 'กรุณากรอก Username'
+    errors.password = password.value ? '' : 'กรุณากรอก Password'
     return !errors.name && !errors.password
   }
 
